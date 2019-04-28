@@ -7,11 +7,11 @@ class AuthService {
   Client _client = Client();
 
   // TODO: extract this to a config file
-  String _url = "10.0.0.199:8080/api/v1";
+  String _url = "10.0.0.199:8080";
 
   Future<Auth> loginUser(Map<String, dynamic> data) async {
     try {
-      final response = await _client.post(new Uri.http(_url, "/login"),
+      final response = await _client.post(new Uri.http(_url, "/api/v1/login"),
           body: jsonEncode(data));
       final statusCode = response.statusCode;
 
