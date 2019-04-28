@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hayum/screens/home/home_screen.dart';
+import 'package:hayum/screens/auth/login_screen.dart';
 
 class Hayum extends StatelessWidget {
   // This widget is the root of your application.
@@ -8,7 +8,7 @@ class Hayum extends StatelessWidget {
     return MaterialApp(
       title: 'Hayum',
       theme: ThemeData.dark(),
-      home: HomeScreen(title: 'Hayum'),
+      home: LoginScreen(title: 'Login'),
     );
   }
 }
