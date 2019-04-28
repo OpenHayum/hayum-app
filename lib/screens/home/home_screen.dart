@@ -1,4 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:hayum/bloc/auth_bloc.dart';
+import 'package:hayum/models/auth_model.dart';
+
+class _BottomNavigationBarFactory {
+  static BottomNavigationBar create(int _selectedIndex,
+      ValueChanged<int> _onItemTapped) {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+            icon: Icon(Icons.home), title: Container(height: 0.0)),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.history), title: Container(height: 0.0)),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.search), title: Container(height: 0.0)),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.account_box), title: Container(height: 0.0)),
+      ],
+      currentIndex: _selectedIndex,
+      fixedColor: Colors.green,
+      onTap: _onItemTapped,
+    );
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key, this.title}) : super(key: key);
@@ -28,36 +52,48 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Hayum'),
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), title: Container(height: 0.0)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.history), title: Container(height: 0.0)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search), title: Container(height: 0.0)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_box), title: Container(height: 0.0)),
-        ],
-        currentIndex: _selectedIndex,
-        fixedColor: Colors.green,
-        onTap: _onItemTapped,
-      ),
-    );
+  void didUpdateWidget(HomeScreen old) {
+    super.didUpdateWidget(old);
+    var body = {"Identifier": "redjohn@gmail.com", "Password": "dev"};
+    print(body);
+    authBloc.loginUser(body);
+  }
+
+  @override
+  void dispose() {
+    authBloc.dispose();
+    super.dispose();
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+//    this.initState();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Hayum'),
+      ),
+      body: StreamBuilder(stream: authBloc.loggedInUser,
+          builder: (context, AsyncSnapshot<Auth> snapshot) {
+            if (snapshot.hasData) {
+              return buildProfile(snapshot);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+
+            return Center(child: CircularProgressIndicator());
+          }),
+      bottomNavigationBar: _BottomNavigationBarFactory.create(
+          _selectedIndex, _onItemTapped),
+    );
+  }
+
+  Widget buildProfile(AsyncSnapshot<Auth> snapshot) {
+    return Center(child: Text(snapshot.data.user.email));
   }
 }
