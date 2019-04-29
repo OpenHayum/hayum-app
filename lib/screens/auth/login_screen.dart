@@ -45,23 +45,28 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildLoginForm() {
     const padding = Padding(padding: EdgeInsets.all(10));
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Hayum'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            HayumTextField(labelText: "Email or Mobile No."),
-            padding,
-            HayumTextField(labelText: "Password", obscureText: true),
-            padding,
-            RaisedButton(
-              child: Padding(child: Text("Login"), padding: EdgeInsets.fromLTRB(40, 20, 40, 20)),
-              onPressed: _onLoginButtonPressed,
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
-            )
-          ],
-        ));
+        body: Container(
+            padding: EdgeInsets.all(30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset("images/hy_logo.png", scale: 2),
+                Padding(padding: EdgeInsets.all(30.0)),
+                HayumTextField(labelText: "Email or Mobile No."),
+                padding,
+                HayumTextField(labelText: "Password", obscureText: true),
+                padding,
+                RaisedButton(
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
+                  child: Padding(
+                      child: Text("Login"), padding: EdgeInsets.fromLTRB(40, 20, 40, 20)),
+                  onPressed: _onLoginButtonPressed,
+                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+                )
+              ],
+            )));
   }
 
   void _onLoginButtonPressed() {
