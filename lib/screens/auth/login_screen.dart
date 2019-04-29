@@ -18,6 +18,17 @@ class _LoginScreenState extends State<LoginScreen> {
   String _password;
   bool _hasPressedButton = false;
 
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    print("INIT_STATE");
+    _idController.addListener(_setIdentifier);
+    _passController.addListener(_setPassword);
+  }
+
   @override
   void dispose() {
     authBloc.dispose();
@@ -52,9 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <Widget>[
                 Image.asset("images/hy_logo.png", scale: 2),
                 Padding(padding: EdgeInsets.all(30.0)),
-                HayumTextField(labelText: "Email or Mobile No."),
+                HayumTextField(labelText: "Email or Mobile No.", controller: _idController),
                 padding,
-                HayumTextField(labelText: "Password", obscureText: true),
+                HayumTextField(
+                    labelText: "Password", controller: _passController, obscureText: true),
                 padding,
                 RaisedButton(
                   color: Theme
@@ -72,8 +84,17 @@ class _LoginScreenState extends State<LoginScreen> {
   void _onLoginButtonPressed() {
     Map<String, String> data = {"Identifier": _identifier, "Password": _password};
     authBloc.loginUser(data);
+//    print(data);
     setState(() {
       _hasPressedButton = true;
     });
+  }
+
+  void _setIdentifier() {
+    _identifier = _idController.text;
+  }
+
+  void _setPassword() {
+    _password = _passController.text;
   }
 }

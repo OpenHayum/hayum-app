@@ -11,6 +11,7 @@ class AuthService {
 
   Future<Auth> loginUser(Map<String, dynamic> data) async {
     try {
+      print("Calling Login API...");
       final response = await _client.post(new Uri.http(_url, "/api/v1/login"),
           body: jsonEncode(data));
       final statusCode = response.statusCode;
